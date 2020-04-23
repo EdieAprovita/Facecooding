@@ -1,8 +1,14 @@
 const express = require("express");
+const connectDB = require("./config/db");
+
 const app = express();
 
-app.get("/", (req, res) => res.send("hello"));
+//Connect MongoDB Database
 
-const port = process.env.PORT || 5000;
+connectDB();
 
-app.listen(port, () => console.log(`Listening on ${port}`));
+app.get("/", (req, res) => res.send("API Running"));
+
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
