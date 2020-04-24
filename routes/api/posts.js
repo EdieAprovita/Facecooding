@@ -1,18 +1,17 @@
 const express = require("express");
 const router = express.Router();
-const { check, validationResult } = require("express-validator/check");
+const { check, validationResult } = require("express-validator");
 const auth = require("../../middleware/auth");
 
 const Post = require("../../models/Post");
 const User = require("../../models/User");
-const Profile = require("../../models/Profile");
 
 //POST api/posts
 //Create a post
 
 router.post(
   "/",
-  [auth, [check("text", "text is required").not().isEmpty()]],
+  [auth, [check("text", "Text is required").not().isEmpty()]],
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -39,8 +38,8 @@ router.post(
   }
 );
 
-//GET api/posts
-//Create all post
+// GET api/posts
+//Get all posts
 
 router.get("/", auth, async (req, res) => {
   try {
@@ -53,116 +52,108 @@ router.get("/", auth, async (req, res) => {
 });
 
 //GET api/posts/:id
-//Post by id
+//Get post by ID
 
 router.get("/:id", auth, async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
 
-    if (!post) {
-      return res.status(404).json({ msg: "Post not found" });
+    // ObjectId format and post
+    if (!req.params.id.match(/^[0-9a-fA-F]{24}$/) || !post) {
+      return res.status(404).json({ msg: " Sorry mate no post found!!!" });
     }
 
     res.json(post);
   } catch (err) {
     console.error(err.message);
-    if (err.kind === "ObjectId") {
-      return res.status(404).json({ msg: "Post not found" });
-    }
+
     res.status(500).send("Server Error");
   }
 });
 
-//DELETE api/posts/:id
-//Delete a post
+// DELETE api/posts/:id
+// Delete a post
 
 router.delete("/:id", auth, async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
 
-    if (!post) {
-      return res.status(404).json({ msg: "Post not found" });
+    // ObjectId format and post
+    if (!req.params.id.match(/^[0-9a-fA-F]{24}$/) || !post) {
+      return res.status(404).json({ msg: "Sorry mate no post found!!!" });
     }
 
     if (post.user.toString() !== req.user.id) {
-      return res.status(401).json({ msg: "User not authorized" });
+      return res.status(401).json({
+        msg: "User not authorized, Im calling the police right now!!!",
+      });
     }
 
     await post.remove();
 
-    res.json({ msg: "Post removed, bye, bye!!" });
+    res.json({ msg: "Bye, bye " });
   } catch (err) {
     console.error(err.message);
-    if (err.kind === "ObjectId") {
-      return res.status(404).json({ msg: "Post not found" });
-    }
+
     res.status(500).send("Server Error");
   }
 });
 
 //PUT api/posts/like/:id
-//Like post
+// Like a post
 
 router.put("/like/:id", auth, async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
 
-    //Check the like of the post
-    if (
-      post.likes.filter((like) => like.user.toString() === req.user.id).length >
-      0
-    ) {
-      return res.status(400).json({ msg: "Post is already like it sorry " });
+    // Check if the post has already been liked
+    if (post.likes.some((like) => like.user.toString() === req.user.id)) {
+      return res.status(400).json({ msg: "Already liked, sorry mate!!" });
     }
 
     post.likes.unshift({ user: req.user.id });
 
     await post.save();
 
-    res.json(post.likes);
+    return res.json(post.likes);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send("Server error");
+    res.status(500).send("Server Error");
   }
 });
 
 //PUT api/posts/unlike/:id
-//UnLike post
+//Unlike a post
 
 router.put("/unlike/:id", auth, async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
 
-    //Check the like of the post
-    if (
-      post.likes.filter((like) => like.user.toString() === req.user.id)
-        .length === 0
-    ) {
-      return res.status(400).json({ msg: "Post is not yet like!! " });
+    // Check if the post has already been liked
+    if (!post.likes.some((like) => like.user.toString() === req.user.id)) {
+      return res.status(400).json({ msg: "Not yet been liked, lucky!!" });
     }
 
-    //Get remove index
-    const removeIndex = post.likes
-      .map((like) => like.user.toString())
-      .indexOf(req.user.id);
-
-    post.likes.splice(removeIndex, 1);
+    // remove the like
+    post.likes = post.likes.filter(
+      ({ user }) => user.toString() !== req.user.id
+    );
 
     await post.save();
 
-    res.json(post.likes);
+    return res.json(post.likes);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send("Server error");
+    res.status(500).send("Server Error");
   }
 });
 
-//POST api/posts/comments/:id
-//Comment a post
+//POST api/posts/comment/:id
+//Comment on a post
 
 router.post(
   "/comment/:id",
-  [auth, [check("text", "text is required").not().isEmpty()]],
+  [auth, [check("text", "Text is required").not().isEmpty()]],
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -181,6 +172,7 @@ router.post(
       };
 
       post.comments.unshift(newComment);
+
       await post.save();
 
       res.json(post.comments);
@@ -192,40 +184,38 @@ router.post(
 );
 
 //DELETE api/posts/comment/:id/:comment_id
-//Delete comment
-
+//delete comment
 router.delete("/comment/:id/:comment_id", auth, async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
 
-    //Pull commnent
+    // Pull comment
     const comment = post.comments.find(
       (comment) => comment.id === req.params.comment_id
     );
-
-    //Comment exist
+    // Comment exists
     if (!comment) {
-      return res.status(404).json({ msg: "Comment doesnt exist" });
+      return res
+        .status(404)
+        .json({ msg: "Comment does not exist, sorry my man!!!" });
     }
-
-    //check user
+    // Check user
     if (comment.user.toString() !== req.user.id) {
-      return res.status(401).json({ msg: "User not authorized, call 911!!!" });
+      return res
+        .status(401)
+        .json({ msg: "User not authorized, Im calling the police!!!!" });
     }
 
-    //Get remove index
-    const removeIndex = post.comments
-      .map((comment) => comment.user.toString())
-      .indexOf(req.user.id);
-
-    post.comments.splice(removeIndex, 1);
+    post.comments = post.comments.filter(
+      ({ id }) => id !== req.params.comment_id
+    );
 
     await post.save();
 
-    res.json(post.comments);
+    return res.json(post.comments);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send("Server error");
+    return res.status(500).send("Server Error");
   }
 });
 
