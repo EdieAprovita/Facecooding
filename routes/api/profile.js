@@ -1,5 +1,7 @@
 const express = require("express");
 const router = express.Router();
+const request = require("request");
+const config = require("config");
 const auth = require("../../middleware/auth");
 const { check, validationResult } = require("express-validator/check");
 
@@ -165,6 +167,81 @@ router.delete("/", auth, async (req, res) => {
   }
 });
 
+//PUT api/profile/education
+//Add profile education
+
+router.put(
+  "/education",
+  [
+    auth,
+    [
+      check("school", "School is required").not().isEmpty(),
+      check("degree", "Degree is required").not().isEmpty(),
+      check("fieldofstudy", "Fild of study date is required").not().isEmpty(),
+      check("from", "From is required").not().isEmpty(),
+    ],
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const {
+      school,
+      degree,
+      fieldofstudy,
+      from,
+      to,
+      current,
+      description,
+    } = req.body;
+
+    const newEdu = {
+      school,
+      degree,
+      fieldofstudy,
+      from,
+      to,
+      current,
+      description,
+    };
+
+    try {
+      const profile = await Profile.findOne({ user: req.user.id });
+
+      profile.education.unshift(newEdu);
+
+      await profile.save();
+
+      res.json(profile);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send("Server errror");
+    }
+  }
+);
+
+//DELETE api/profile/education
+//Delete education
+
+router.delete("/education/:edu_id", auth, async (req, res) => {
+  try {
+    const profile = await Profile.findOne({ user: req.user.id });
+
+    const removeIndex = profile.education
+      .map((item) => item.id)
+      .indexOf(req.params.edu_id);
+
+    profile.education.splice(removeIndex, 1);
+    await profile.save();
+    res.json(profile);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
+
 //PUT api/profile/expirience
 //Add profile experience
 
@@ -219,20 +296,30 @@ router.put(
   }
 );
 
-//DELETE api/profile/expirience
-//Delete experience
+//GET api/profile/github/:username
+//User repos from Github
 
-router.delete("/experience/:exp_id", auth, async (req, res) => {
+router.get("/github/:username", (req, res) => {
   try {
-    const profile = await Profile.findOne({ user: req.user.id });
+    const options = {
+      uri: `https://api.github.com/users/${
+        req.params.username
+      }/repos?per_page=5&sort=created:asc&client_id=${config.set(
+        "githubClientId"
+      )}&client_secret=${config.get("githubSecret")}`,
+      method: "GET",
+      headers: { "user-agent": "node.js" },
+    };
 
-    const removeIndex = profile.experience
-      .map((item) => item.id)
-      .indexOf(req.params.exp_id);
+    request(options, (error, response, body) => {
+      if (error) console.error(error);
 
-    profile.experience.splice(removeIndex, 1);
-    await profile.save();
-    res.json(profile);
+      if (response.statusCode !== 200) {
+        return res.status(404).json({ msg: "No Github profile sorry!!!" });
+      }
+
+      res.json(JSON.parse(body));
+    });
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");
