@@ -6,21 +6,19 @@ import Landing from "./components/Layout/Landing";
 import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
 
-function App() {
-  return (
-    <Router>
-      <Fragment>
-        <Navbar />
-        <Route exact path='/' component={Landing} />
-        <section className='container'>
-          <Switch>
-            <Router exact path='/register' component={Register} />
-            <Router exact path='/login' component={Login} />
-          </Switch>
-        </section>
-      </Fragment>
-    </Router>
-  );
-}
+const App = () => (
+  <Router>
+    <Fragment>
+      <Navbar />
+      <Route exact path='/' component={Landing} />
+      <section className='container'>
+        <Switch>
+          <Router exact path='/register' component={Register} />
+          <Router exact path='/login' component={Login} />
+        </Switch>
+      </section>
+    </Fragment>
+  </Router>
+);
 
 export default App;
