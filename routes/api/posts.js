@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 
-//
+//GET api/users/register
 
-router.get("/", (req, res) => res.send("Post route"));
+router.get("/register", (req, res) => res.json({ msg: "user works"}))
 
 module.exports = router;
