@@ -5,7 +5,6 @@ const userSchema = new Schema ({
     username: {
         type: String,
         required:true,
-        unique:"This username is already taken"
     },
 
     password: {
@@ -16,7 +15,6 @@ const userSchema = new Schema ({
     email: {
         type: String,
         required:true,
-        unique: "This email is already in use!!"
     },
 
     avatar: {

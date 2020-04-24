@@ -1,3 +1,5 @@
 {
-    "mongoURI": "mongodb+srv://edieveg316:ea36153547@facecooking-rvhx4.mongodb.net/test?retryWrites=true&w=majority"
+    "mongoURI": "mongodb+srv://edieveg316:ea36153547@facecooking-rvhx4.mongodb.net/test?retryWrites=true&w=majority",
+    "jwtSecret": "GOV3GAN"
+    
 }
