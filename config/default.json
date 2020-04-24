@@ -1,6 +1,0 @@
-{
-  "mongoURI": "mongodb+srv://edieveg316:ea36153547@facecooking-rvhx4.mongodb.net/test?retryWrites=true&w=majority",
-  "jwtSecret": "GOV3GAN",
-  "githubCliendId": "e47dce87701ab447ccc4",
-  "githubSecret": "25e4d3beabc4bfd8f0710ccc76f18e71499c9210"
-}
