@@ -22,13 +22,13 @@ router.get("/", auth, async (req, res) => {
 });
 
 //POST api/auth
-//Authenticate User & Get the  token
-// @access   Public
+// User verify & Get the  token
+
 router.post(
   "/",
   [
-    check("email", "Please include a valid email").isEmail(),
-    check("password", "Password is required").exists(),
+    check("email", "Please type a valid email or beat it!!").isEmail(),
+    check("password", "Password is required, you should not PASS!!!").exists(),
   ],
   async (req, res) => {
     const errors = validationResult(req);
@@ -44,7 +44,7 @@ router.post(
       if (!user) {
         return res
           .status(400)
-          .json({ errors: [{ msg: "Invalid Credentials" }] });
+          .json({ errors: [{ msg: "Invalid Credentials, Im calling 911" }] });
       }
 
       const isMatch = await bcrypt.compare(password, user.password);
@@ -52,7 +52,7 @@ router.post(
       if (!isMatch) {
         return res
           .status(400)
-          .json({ errors: [{ msg: "Invalid Credentials" }] });
+          .json({ errors: [{ msg: "Invalid Credentials, Im calling 911 " }] });
       }
 
       const payload = {

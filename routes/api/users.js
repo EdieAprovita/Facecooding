@@ -1,10 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const { check, validationResult } = require("express-validator/check");
+const { check, validationResult } = require("express-validator");
 const gravatar = require("gravatar");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const config = require("config");
+const normalize = require("normalize-url");
 const User = require("../../models/User");
 
 //GET api/users/register
@@ -12,8 +13,8 @@ const User = require("../../models/User");
 router.post(
   "/",
   [
-    check("name", "name is required").not().isEmpty(),
-    check("email", "Please enter a valid email").isEmail(),
+    check("name", "Name is required").not().isEmpty(),
+    check("email", "Please enter a valid email, dont play around!!").isEmail(),
     check(
       "password",
       "Please enter a password with 8 or more characters please"
@@ -33,14 +34,17 @@ router.post(
       if (user) {
         return res
           .status(400)
-          .json({ errors: [{ msg: "name is already in use" }] });
+          .json({ errors: [{ msg: "Name is already in use" }] });
       }
 
-      const avatar = gravatar.url(email, {
-        s: "200",
-        r: "pg",
-        d: "mm",
-      });
+      const avatar = normalize(
+        gravatar.url(email, {
+          s: "200",
+          r: "pg",
+          d: "mm",
+        }),
+        { forceHttps: true }
+      );
 
       user = new User({
         name,
