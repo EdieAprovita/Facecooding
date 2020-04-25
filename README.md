@@ -35,9 +35,6 @@ Githubtoken
 
 Para correr el programa en la carpeta de raiz npm run dev y correran ambos entornos 
 
-### Analice las pruebas end-to-end 🔩
-
-
 ```
 npm run dev 
 ```
