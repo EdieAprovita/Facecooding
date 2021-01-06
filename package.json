@@ -12,7 +12,7 @@
   "author": "Edgar Chavero",
   "license": "MIT",
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "bcryptjs": "^2.4.3",
     "body": "^5.1.0",
     "concurrently": "^5.1.0",
