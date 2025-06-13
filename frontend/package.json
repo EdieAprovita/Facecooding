@@ -32,6 +32,7 @@
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
     "@testing-library/jest-dom": "^6",
+    "jest-environment-jsdom": "^29",
     "@testing-library/react": "^14",
     "@types/jest": "^29",
     "@types/node": "^20",
