@@ -2,11 +2,10 @@
   "name": "facecooding",
   "version": "1.0.0",
   "description": "Cooking Network",
-  "main": "server.js",
+  "main": "server-new.js",
   "scripts": {
     "start": "node server-new.js",
     "server": "nodemon server-new.js",
-    "server:old": "nodemon server.js",
     "client": "npm run dev --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "test": "jest --watchAll=false",

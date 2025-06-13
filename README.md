@@ -35,13 +35,9 @@ npm install
 ```
 
 3. **Configuración del Backend**:
-Crea un archivo `default.json` en la carpeta `config/` con las variables de entorno:
-```json
-{
-  "mongoURI": "tu_mongodb_connection_string",
-  "jwtSecret": "tu_jwt_secret_key",
-  "githubToken": "tu_github_token_opcional"
-}
+Crea un archivo `.env` en la raíz del proyecto (puedes usar `.env.example` como referencia) con las variables de entorno necesarias:
+```bash
+cp .env.example .env
 ```
 
 4. **Configuración del Frontend**:
@@ -110,7 +106,7 @@ El backend estará disponible en: `http://localhost:5000`
 
 ### 🚧 En desarrollo:
 - 📝 Sistema de posts
-- � Comentarios
+- 💬 Comentarios
 - 👥 Perfiles públicos
 - 🔍 Búsqueda de desarrolladores
 

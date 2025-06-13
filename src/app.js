@@ -3,6 +3,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
+const path = require('path');
 
 const connectDB = require('./config/database');
 const config = require('./config/config');
@@ -102,10 +103,7 @@ class App {
     // API routes
     this.app.use('/api/auth', authRoutes);
     
-    // Legacy route compatibility (to be migrated)
-    this.app.use('/api/users', require('../routes/api/users')); // Will be replaced
-    this.app.use('/api/profile', require('../routes/api/profile')); // Will be replaced
-    this.app.use('/api/posts', require('../routes/api/posts')); // Will be replaced
+    // Additional routes can be added here
 
     // Serve static files in production
     if (config.NODE_ENV === 'production') {
