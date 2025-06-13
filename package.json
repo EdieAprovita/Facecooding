@@ -8,7 +8,7 @@
     "server": "nodemon server-new.js",
     "client": "npm run dev --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "test": "jest --watchAll=false",
+    "test": "jest --watchAll=true",
     "test:watch": "jest --watchAll",
     "lint": "echo 'No linting configured yet'",
     "build": "npm run build --prefix client"

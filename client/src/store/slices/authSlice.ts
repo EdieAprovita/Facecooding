@@ -20,7 +20,7 @@ export const loadUser = createAsyncThunk(
   'auth/loadUser',
   async (_, { rejectWithValue }) => {
     try {
-      const res = await axios.get('/api/auth');
+      const res = await axios.get('/api/auth/me');
       return res.data;
     } catch (error: unknown) {
       localStorage.removeItem('token');
@@ -40,7 +40,7 @@ export const register = createAsyncThunk(
         },
       };
 
-      const res = await axios.post('/api/users', userData, config);
+      const res = await axios.post('/api/auth/register', userData, config);
       
       if (res.data.token) {
         localStorage.setItem('token', res.data.token);
@@ -64,7 +64,7 @@ export const login = createAsyncThunk(
         },
       };
 
-      const res = await axios.post('/api/auth', userData, config);
+      const res = await axios.post('/api/auth/login', userData, config);
       
       if (res.data.token) {
         localStorage.setItem('token', res.data.token);

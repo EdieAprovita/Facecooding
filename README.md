@@ -47,7 +47,7 @@ Crea un archivo `default.json` en la carpeta `config/` con las variables de ento
 4. **Configuración del Frontend**:
 Crea un archivo `.env.local` en la carpeta `client/`:
 ```
-NEXT_PUBLIC_API_URL=http://localhost:5000
+NEXT_PUBLIC_API_URL=http://localhost:5001
 ```
 
 ## 🚀 Ejecutando el Proyecto

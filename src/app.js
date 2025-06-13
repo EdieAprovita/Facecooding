@@ -70,7 +70,7 @@ class App {
     this.app.use(cors({
       origin: config.NODE_ENV === 'production' 
         ? ['https://yourfrontend.com'] // Add your production frontend URL
-        : ['http://localhost:3000', 'http://localhost:3001'],
+        : ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:5001'],
       credentials: true,
       methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
       allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']

@@ -31,7 +31,7 @@ Una red social para desarrolladores construida con Next.js, Material UI y Redux 
 2. **Configurar variables de entorno**:
    Crear `.env.local`:
    ```
-   NEXT_PUBLIC_API_URL=http://localhost:5000
+   NEXT_PUBLIC_API_URL=http://localhost:5001
    ```
 
 3. **Ejecutar en desarrollo**:
