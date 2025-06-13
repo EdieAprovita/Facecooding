@@ -1,6 +1,5 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-jest.mock('normalize-url', () => jest.fn((u) => u));
 jest.mock('../src/models/User', () => {
   const mockModel: any = function (data: any) {
     Object.assign(this, data);

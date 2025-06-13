@@ -1,8 +1,6 @@
 import request from 'supertest';
 import App from '../src/app';
 
-jest.mock('normalize-url', () => jest.fn((u) => u));
-
 jest.mock('../src/config/database', () => jest.fn());
 
 describe('Health Endpoint', () => {
