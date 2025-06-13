@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
@@ -16,9 +17,6 @@ class App {
     this.app = express();
     this.port = config.PORT;
     
-    // Initialize database
-    this.connectDatabase();
-    
     // Initialize middleware
     this.initializeMiddleware();
     
@@ -27,6 +25,11 @@ class App {
     
     // Initialize error handling
     this.initializeErrorHandling();
+    
+    // Initialize database (async, don't wait)
+    this.connectDatabase().catch(err => {
+      console.warn('⚠️ Database connection failed:', err.message);
+    });
   }
 
   async connectDatabase() {
@@ -103,9 +106,13 @@ class App {
     this.app.use('/api/auth', authRoutes);
     
     // Legacy route compatibility (to be migrated)
-    this.app.use('/api/users', require('../routes/api/users')); // Will be replaced
-    this.app.use('/api/profile', require('../routes/api/profile')); // Will be replaced
-    this.app.use('/api/posts', require('../routes/api/posts')); // Will be replaced
+    try {
+      this.app.use('/api/users', require('../routes/api/users'));
+      this.app.use('/api/profile', require('../routes/api/profile'));
+      this.app.use('/api/posts', require('../routes/api/posts'));
+    } catch (error) {
+      console.warn('⚠️ Some legacy routes failed to load:', error.message);
+    }
 
     // Serve static files in production
     if (config.NODE_ENV === 'production') {
