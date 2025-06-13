@@ -45,8 +45,8 @@ const UserSchema = new mongoose.Schema({
   toObject: { virtuals: true }
 });
 
-// Index for better performance
-UserSchema.index({ email: 1 });
+// Index is already created by unique: true on email field
+// UserSchema.index({ email: 1 }); // Removed to avoid duplicate index warning
 
 // Virtual for profile
 UserSchema.virtual('profile', {
