@@ -1,15 +1,15 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from '../../utils/axios';
-import { 
-  AuthState, 
-  LoginFormData, 
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axiosInstance from "../../utils/axios";
+import {
+  AuthState,
+  LoginFormData,
   RegisterFormData,
-  ErrorResponse 
-} from '../../types';
+  ErrorResponse,
+} from "../../types";
 
 // Initial state
 const initialState: AuthState = {
-  token: typeof window !== 'undefined' ? localStorage.getItem('token') : null,
+  token: typeof window !== "undefined" ? localStorage.getItem("token") : null,
   isAuthenticated: false,
   loading: true,
   user: null,
@@ -17,13 +17,13 @@ const initialState: AuthState = {
 
 // Async thunks
 export const loadUser = createAsyncThunk(
-  'auth/loadUser',
+  "auth/loadUser",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await axios.get('/api/auth/me');
+      const res = await axiosInstance.get("/auth/me");
       return res.data;
     } catch (error: unknown) {
-      localStorage.removeItem('token');
+      localStorage.removeItem("token");
       const errorResponse = error as { response: { data: ErrorResponse } };
       return rejectWithValue(errorResponse.response.data);
     }
@@ -31,21 +31,21 @@ export const loadUser = createAsyncThunk(
 );
 
 export const register = createAsyncThunk(
-  'auth/register',
+  "auth/register",
   async (userData: RegisterFormData, { rejectWithValue }) => {
     try {
       const config = {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       };
 
-      const res = await axios.post('/api/auth/register', userData, config);
-      
+      const res = await axiosInstance.post("/auth/register", userData, config);
+
       if (res.data.token) {
-        localStorage.setItem('token', res.data.token);
+        localStorage.setItem("token", res.data.token);
       }
-      
+
       return res.data;
     } catch (error: unknown) {
       const errorResponse = error as { response: { data: ErrorResponse } };
@@ -55,21 +55,21 @@ export const register = createAsyncThunk(
 );
 
 export const login = createAsyncThunk(
-  'auth/login',
+  "auth/login",
   async (userData: LoginFormData, { rejectWithValue }) => {
     try {
       const config = {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       };
 
-      const res = await axios.post('/api/auth/login', userData, config);
-      
+      const res = await axiosInstance.post("/auth/login", userData, config);
+
       if (res.data.token) {
-        localStorage.setItem('token', res.data.token);
+        localStorage.setItem("token", res.data.token);
       }
-      
+
       return res.data;
     } catch (error: unknown) {
       const errorResponse = error as { response: { data: ErrorResponse } };
@@ -80,11 +80,11 @@ export const login = createAsyncThunk(
 
 // Auth slice
 const authSlice = createSlice({
-  name: 'auth',
+  name: "auth",
   initialState,
   reducers: {
     logout: (state) => {
-      localStorage.removeItem('token');
+      localStorage.removeItem("token");
       state.token = null;
       state.isAuthenticated = false;
       state.loading = false;

@@ -1,13 +1,13 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from '../../utils/axios';
-import { 
-  Profile, 
-  Experience, 
-  Education, 
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axiosInstance from "../../utils/axios";
+import {
+  Profile,
+  Experience,
+  Education,
   GitHubRepo,
   ErrorResponse,
-  ProfileFormData 
-} from '../../types';
+  ProfileFormData,
+} from "../../types";
 
 interface ProfileState {
   profile: Profile | null;
@@ -27,10 +27,10 @@ const initialState: ProfileState = {
 
 // Async thunks
 export const getCurrentProfile = createAsyncThunk(
-  'profile/getCurrentProfile',
+  "profile/getCurrentProfile",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await axios.get('/api/profile/me');
+      const res = await axiosInstance.get("/profile/me");
       return res.data;
     } catch (error: unknown) {
       const errorResponse = error as { response: { data: ErrorResponse } };
@@ -40,10 +40,10 @@ export const getCurrentProfile = createAsyncThunk(
 );
 
 export const getProfiles = createAsyncThunk(
-  'profile/getProfiles',
+  "profile/getProfiles",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await axios.get('/api/profile');
+      const res = await axiosInstance.get("/profile");
       return res.data;
     } catch (error: unknown) {
       const errorResponse = error as { response: { data: ErrorResponse } };
@@ -53,10 +53,10 @@ export const getProfiles = createAsyncThunk(
 );
 
 export const getProfileById = createAsyncThunk(
-  'profile/getProfileById',
+  "profile/getProfileById",
   async (userId: string, { rejectWithValue }) => {
     try {
-      const res = await axios.get(`/api/profile/user/${userId}`);
+      const res = await axiosInstance.get(`/profile/user/${userId}`);
       return res.data;
     } catch (error: unknown) {
       const errorResponse = error as { response: { data: ErrorResponse } };
@@ -66,10 +66,10 @@ export const getProfileById = createAsyncThunk(
 );
 
 export const getGithubRepos = createAsyncThunk(
-  'profile/getGithubRepos',
+  "profile/getGithubRepos",
   async (username: string, { rejectWithValue }) => {
     try {
-      const res = await axios.get(`/api/profile/github/${username}`);
+      const res = await axiosInstance.get(`/profile/github/${username}`);
       return res.data;
     } catch (error: unknown) {
       const errorResponse = error as { response: { data: ErrorResponse } };
@@ -79,16 +79,16 @@ export const getGithubRepos = createAsyncThunk(
 );
 
 export const createProfile = createAsyncThunk(
-  'profile/createProfile',
+  "profile/createProfile",
   async (formData: ProfileFormData, { rejectWithValue }) => {
     try {
       const config = {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       };
 
-      const res = await axios.post('/api/profile', formData, config);
+      const res = await axiosInstance.post("/profile", formData, config);
       return res.data;
     } catch (error: unknown) {
       const errorResponse = error as { response: { data: ErrorResponse } };
@@ -98,16 +98,20 @@ export const createProfile = createAsyncThunk(
 );
 
 export const addExperience = createAsyncThunk(
-  'profile/addExperience',
-  async (formData: Omit<Experience, '_id'>, { rejectWithValue }) => {
+  "profile/addExperience",
+  async (formData: Omit<Experience, "_id">, { rejectWithValue }) => {
     try {
       const config = {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       };
 
-      const res = await axios.put('/api/profile/experience', formData, config);
+      const res = await axiosInstance.put(
+        "/profile/experience",
+        formData,
+        config
+      );
       return res.data;
     } catch (error: unknown) {
       const errorResponse = error as { response: { data: ErrorResponse } };
@@ -117,16 +121,20 @@ export const addExperience = createAsyncThunk(
 );
 
 export const addEducation = createAsyncThunk(
-  'profile/addEducation',
-  async (formData: Omit<Education, '_id'>, { rejectWithValue }) => {
+  "profile/addEducation",
+  async (formData: Omit<Education, "_id">, { rejectWithValue }) => {
     try {
       const config = {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       };
 
-      const res = await axios.put('/api/profile/education', formData, config);
+      const res = await axiosInstance.put(
+        "/profile/education",
+        formData,
+        config
+      );
       return res.data;
     } catch (error: unknown) {
       const errorResponse = error as { response: { data: ErrorResponse } };
@@ -136,10 +144,10 @@ export const addEducation = createAsyncThunk(
 );
 
 export const deleteExperience = createAsyncThunk(
-  'profile/deleteExperience',
+  "profile/deleteExperience",
   async (id: string, { rejectWithValue }) => {
     try {
-      const res = await axios.delete(`/api/profile/experience/${id}`);
+      const res = await axiosInstance.delete(`/profile/experience/${id}`);
       return res.data;
     } catch (error: unknown) {
       const errorResponse = error as { response: { data: ErrorResponse } };
@@ -149,10 +157,10 @@ export const deleteExperience = createAsyncThunk(
 );
 
 export const deleteEducation = createAsyncThunk(
-  'profile/deleteEducation',
+  "profile/deleteEducation",
   async (id: string, { rejectWithValue }) => {
     try {
-      const res = await axios.delete(`/api/profile/education/${id}`);
+      const res = await axiosInstance.delete(`/profile/education/${id}`);
       return res.data;
     } catch (error: unknown) {
       const errorResponse = error as { response: { data: ErrorResponse } };
@@ -162,11 +170,10 @@ export const deleteEducation = createAsyncThunk(
 );
 
 export const deleteAccount = createAsyncThunk(
-  'profile/deleteAccount',
+  "profile/deleteAccount",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await axios.delete('/api/profile');
-      return res.data;
+      await axiosInstance.delete("/profile");
     } catch (error: unknown) {
       const errorResponse = error as { response: { data: ErrorResponse } };
       return rejectWithValue(errorResponse.response.data);
@@ -175,7 +182,7 @@ export const deleteAccount = createAsyncThunk(
 );
 
 const profileSlice = createSlice({
-  name: 'profile',
+  name: "profile",
   initialState,
   reducers: {
     clearProfile: (state) => {
@@ -195,7 +202,7 @@ const profileSlice = createSlice({
       })
       .addCase(getCurrentProfile.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload as string || 'An error occurred';
+        state.error = (action.payload as string) || "An error occurred";
         state.profile = null;
       })
       .addCase(getProfiles.pending, (state) => {
@@ -207,7 +214,7 @@ const profileSlice = createSlice({
       })
       .addCase(getProfiles.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload as string || 'An error occurred';
+        state.error = (action.payload as string) || "An error occurred";
       })
       .addCase(getProfileById.pending, (state) => {
         state.loading = true;
@@ -218,7 +225,7 @@ const profileSlice = createSlice({
       })
       .addCase(getProfileById.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload as string || 'An error occurred';
+        state.error = (action.payload as string) || "An error occurred";
         state.profile = null;
       })
       .addCase(getGithubRepos.fulfilled, (state, action) => {

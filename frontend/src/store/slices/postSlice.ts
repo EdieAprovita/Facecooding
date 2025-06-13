@@ -1,9 +1,6 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from '../../utils/axios';
-import { 
-  PostState, 
-  ErrorResponse 
-} from '../../types';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axiosInstance from "../../utils/axios";
+import { PostState, ErrorResponse } from "../../types";
 
 const initialState: PostState = {
   posts: [],
@@ -14,10 +11,10 @@ const initialState: PostState = {
 
 // Async thunks
 export const getPosts = createAsyncThunk(
-  'post/getPosts',
+  "post/getPosts",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await axios.get('/api/posts');
+      const res = await axiosInstance.get("/posts");
       return res.data;
     } catch (error: unknown) {
       const errorResponse = error as { response: { data: ErrorResponse } };
@@ -27,10 +24,10 @@ export const getPosts = createAsyncThunk(
 );
 
 export const getPost = createAsyncThunk(
-  'post/getPost',
+  "post/getPost",
   async (id: string, { rejectWithValue }) => {
     try {
-      const res = await axios.get(`/api/posts/${id}`);
+      const res = await axiosInstance.get(`/posts/${id}`);
       return res.data;
     } catch (error: unknown) {
       const errorResponse = error as { response: { data: ErrorResponse } };
@@ -40,10 +37,10 @@ export const getPost = createAsyncThunk(
 );
 
 export const addLike = createAsyncThunk(
-  'post/addLike',
+  "post/addLike",
   async (id: string, { rejectWithValue }) => {
     try {
-      const res = await axios.put(`/api/posts/like/${id}`);
+      const res = await axiosInstance.put(`/posts/like/${id}`);
       return { id, likes: res.data };
     } catch (error: unknown) {
       const errorResponse = error as { response: { data: ErrorResponse } };
@@ -53,10 +50,10 @@ export const addLike = createAsyncThunk(
 );
 
 export const removeLike = createAsyncThunk(
-  'post/removeLike',
+  "post/removeLike",
   async (id: string, { rejectWithValue }) => {
     try {
-      const res = await axios.put(`/api/posts/unlike/${id}`);
+      const res = await axiosInstance.put(`/posts/unlike/${id}`);
       return { id, likes: res.data };
     } catch (error: unknown) {
       const errorResponse = error as { response: { data: ErrorResponse } };
@@ -66,10 +63,10 @@ export const removeLike = createAsyncThunk(
 );
 
 export const deletePost = createAsyncThunk(
-  'post/deletePost',
+  "post/deletePost",
   async (id: string, { rejectWithValue }) => {
     try {
-      await axios.delete(`/api/posts/${id}`);
+      await axiosInstance.delete(`/posts/${id}`);
       return id;
     } catch (error: unknown) {
       const errorResponse = error as { response: { data: ErrorResponse } };
@@ -79,16 +76,16 @@ export const deletePost = createAsyncThunk(
 );
 
 export const addPost = createAsyncThunk(
-  'post/addPost',
+  "post/addPost",
   async (formData: { text: string }, { rejectWithValue }) => {
     try {
       const config = {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       };
 
-      const res = await axios.post('/api/posts', formData, config);
+      const res = await axiosInstance.post("/posts", formData, config);
       return res.data;
     } catch (error: unknown) {
       const errorResponse = error as { response: { data: ErrorResponse } };
@@ -98,16 +95,23 @@ export const addPost = createAsyncThunk(
 );
 
 export const addComment = createAsyncThunk(
-  'post/addComment',
-  async ({ postId, formData }: { postId: string; formData: { text: string } }, { rejectWithValue }) => {
+  "post/addComment",
+  async (
+    { postId, formData }: { postId: string; formData: { text: string } },
+    { rejectWithValue }
+  ) => {
     try {
       const config = {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       };
 
-      const res = await axios.post(`/api/posts/comment/${postId}`, formData, config);
+      const res = await axiosInstance.post(
+        `/posts/comment/${postId}`,
+        formData,
+        config
+      );
       return res.data;
     } catch (error: unknown) {
       const errorResponse = error as { response: { data: ErrorResponse } };
@@ -117,10 +121,15 @@ export const addComment = createAsyncThunk(
 );
 
 export const deleteComment = createAsyncThunk(
-  'post/deleteComment',
-  async ({ postId, commentId }: { postId: string; commentId: string }, { rejectWithValue }) => {
+  "post/deleteComment",
+  async (
+    { postId, commentId }: { postId: string; commentId: string },
+    { rejectWithValue }
+  ) => {
     try {
-      const res = await axios.delete(`/api/posts/comment/${postId}/${commentId}`);
+      const res = await axiosInstance.delete(
+        `/posts/comment/${postId}/${commentId}`
+      );
       return res.data;
     } catch (error: unknown) {
       const errorResponse = error as { response: { data: ErrorResponse } };
@@ -130,7 +139,7 @@ export const deleteComment = createAsyncThunk(
 );
 
 const postSlice = createSlice({
-  name: 'post',
+  name: "post",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -144,7 +153,7 @@ const postSlice = createSlice({
       })
       .addCase(getPosts.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload as string || 'An error occurred';
+        state.error = (action.payload as string) || "An error occurred";
       })
       .addCase(getPost.pending, (state) => {
         state.loading = true;
@@ -155,22 +164,22 @@ const postSlice = createSlice({
       })
       .addCase(getPost.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload as string || 'An error occurred';
+        state.error = (action.payload as string) || "An error occurred";
       })
       .addCase(addLike.fulfilled, (state, action) => {
-        const post = state.posts.find(post => post._id === action.payload.id);
+        const post = state.posts.find((post) => post._id === action.payload.id);
         if (post) {
           post.likes = action.payload.likes;
         }
       })
       .addCase(removeLike.fulfilled, (state, action) => {
-        const post = state.posts.find(post => post._id === action.payload.id);
+        const post = state.posts.find((post) => post._id === action.payload.id);
         if (post) {
           post.likes = action.payload.likes;
         }
       })
       .addCase(deletePost.fulfilled, (state, action) => {
-        state.posts = state.posts.filter(post => post._id !== action.payload);
+        state.posts = state.posts.filter((post) => post._id !== action.payload);
         state.loading = false;
       })
       .addCase(addPost.fulfilled, (state, action) => {
