@@ -1,130 +1,245 @@
-# Facecooding
+# Facecooding - Full Stack Application
 
-Red Social para developers - **Ahora con Next.js 15 y Material UI**
+Una aplicación web completa para una red social de cocina con autenticación JWT, construida con TypeScript.
 
-## 🚀 Nuevo Frontend con Next.js
+## 🏗️ Arquitectura del Proyecto
 
-El proyecto ha sido completamente actualizado con tecnologías modernas:
-- **Next.js 15** con App Router
-- **Material UI** para una interfaz elegante
-- **TypeScript** para mejor desarrollo
-- **Redux Toolkit** para state management
-- **React Hook Form** para formularios eficientes
+El proyecto está dividido en dos carpetas principales:
 
-## Comenzando 🚀
+```
+Facecooding/
+├── backend/          # API REST con Express + TypeScript
+├── frontend/         # Cliente con Next.js + React
+├── package.json      # Scripts para manejar todo el proyecto
+└── README.md
+```
 
-Clona el repositorio
+## 🚀 Tecnologías
 
-### Pre-requisitos 📋
+### Backend
 
-- **Node.js** (versión 18 o superior)
-- **MongoDB** para la base de datos
-- **npm** o **yarn** para gestión de paquetes
+- **Node.js** + **Express.js** con **TypeScript**
+- **MongoDB** con **Mongoose**
+- **JWT** para autenticación
+- **bcryptjs** para hash de contraseñas
+- **express-validator** para validación
+- **helmet**, **cors**, **rate-limiting** para seguridad
+- **Jest** para testing
 
-### Instalación 🔧
+### Frontend
 
-1. **Instala las dependencias del backend**:
+- **Next.js 15** con **App Router**
+- **React 19** con **TypeScript**
+- **Material-UI** para componentes
+- **Redux Toolkit** para manejo de estado
+- **Axios** para peticiones HTTP
+
+## 📦 Instalación
+
+### Instalación completa (Recomendado)
+
 ```bash
+# Instalar todas las dependencias
+npm run install:all
+```
+
+### Instalación individual
+
+```bash
+# Instalar dependencias del proyecto principal
 npm install
+
+# Instalar dependencias del backend
+cd backend && npm install
+
+# Instalar dependencias del frontend
+cd frontend && npm install
 ```
 
-2. **Instala las dependencias del frontend**:
+## 🔧 Configuración
+
+### Backend
+
+1. Copia las variables de entorno:
+
 ```bash
-cd client
-npm install
+# En la raíz del proyecto, crea un archivo .env para el backend
+cp .env.backend.example backend/.env
 ```
 
-3. **Configuración del Backend**:
-Crea un archivo `default.json` en la carpeta `config/` con las variables de entorno:
-```json
-{
-  "mongoURI": "tu_mongodb_connection_string",
-  "jwtSecret": "tu_jwt_secret_key",
-  "githubToken": "tu_github_token_opcional"
-}
+2. Configura las variables de entorno en `backend/.env`:
+
+```env
+NODE_ENV=development
+PORT=3000
+MONGODB_URI=mongodb://localhost:27017/facecooding
+JWT_SECRET=your-super-secret-jwt-key-change-in-production
+JWT_EXPIRE=7d
+BCRYPT_ROUNDS=12
+RATE_LIMIT_WINDOW_MS=900000
+RATE_LIMIT_MAX=100
 ```
 
-4. **Configuración del Frontend**:
-Crea un archivo `.env.local` en la carpeta `client/`:
-```
-NEXT_PUBLIC_API_URL=http://localhost:5001
+### Frontend
+
+1. Configura las variables de entorno en `frontend/.env.local`:
+
+```env
+NEXT_PUBLIC_API_URL=http://localhost:3000/api
 ```
 
-## 🚀 Ejecutando el Proyecto
+## 🏃‍♂️ Uso
 
-### Opción 1: Ejecutar ambos entornos juntos (desde la raíz)
+### Desarrollo (Full Stack)
+
 ```bash
+# Ejecutar backend y frontend simultáneamente
 npm run dev
 ```
 
-### Opción 2: Ejecutar por separado
+### Desarrollo Individual
 
-**Backend** (desde la raíz):
 ```bash
-npm run server
+# Solo backend (Puerto 3000)
+npm run dev --prefix backend
+
+# Solo frontend (Puerto 5001)
+npm run dev --prefix frontend
 ```
 
-**Frontend** (desde client/):
+### Producción
+
 ```bash
-cd client
-npm run dev
+# Construir todo el proyecto
+npm run build
+
+# Iniciar en producción (solo backend)
+npm start
 ```
 
-El frontend estará disponible en: `http://localhost:3000`
-El backend estará disponible en: `http://localhost:5000`
+## 📁 Estructura del Backend
 
-## 🛠️ Tecnologías Utilizadas
+```
+backend/
+├── src/
+│   ├── config/          # Configuraciones (DB, entorno)
+│   ├── controllers/     # Controladores de rutas
+│   ├── middleware/      # Middleware personalizado
+│   ├── models/          # Modelos de MongoDB
+│   ├── routes/          # Definición de rutas
+│   ├── services/        # Lógica de negocio
+│   ├── types/           # Tipos de TypeScript
+│   ├── utils/           # Utilidades
+│   ├── validators/      # Validadores de entrada
+│   ├── app.ts           # Configuración de Express
+│   └── server.ts        # Punto de entrada
+├── dist/                # Código compilado
+├── package.json
+├── tsconfig.json
+└── nodemon.json
+```
 
-### Backend:
-- **Node.js** - Runtime de JavaScript
-- **Express.js** - Framework web
-- **MongoDB** - Base de datos NoSQL
-- **Mongoose** - ODM para MongoDB
-- **JWT** - Autenticación
-- **Bcrypt** - Encriptación de contraseñas
+## 🔐 API de Autenticación
 
-### Frontend (Nuevo):
-- **Next.js 15** - Framework React con App Router
-- **React 19** - Biblioteca de UI
-- **TypeScript** - Superset tipado de JavaScript
-- **Material UI** - Biblioteca de componentes
-- **Redux Toolkit** - State management
-- **React Hook Form** - Manejo de formularios
-- **Axios** - Cliente HTTP
+### Endpoints Públicos
 
-### Frontend (Anterior - Removido):
-- ~~React~~
-- ~~React Redux~~
-- ~~CSS vanilla~~
+```http
+POST /api/auth/register  # Registrar usuario
+POST /api/auth/login     # Iniciar sesión
+```
 
-## 📱 Características Implementadas
+### Endpoints Privados
 
-### ✅ Completado:
-- 🔐 Sistema de autenticación completo (Login/Register)
-- 🏠 Landing page moderna con gradientes
-- 📊 Dashboard de usuario
-- 👤 Gestión de perfiles
-- 🎨 Interfaz moderna con Material UI
-- 📱 Diseño completamente responsive
-- 🔧 TypeScript para mejor desarrollo
+```http
+GET    /api/auth/me               # Obtener usuario actual
+PUT    /api/auth/profile          # Actualizar perfil
+PUT    /api/auth/change-password  # Cambiar contraseña
+DELETE /api/auth/account          # Eliminar cuenta
+```
 
-### 🚧 En desarrollo:
-- 📝 Sistema de posts
-- � Comentarios
-- 👥 Perfiles públicos
-- 🔍 Búsqueda de desarrolladores
+### Endpoints de Admin
 
-## 👥 Autores
+```http
+GET /api/auth/stats    # Estadísticas de usuarios
+GET /api/auth/search   # Buscar usuarios
+```
 
-**Edgar Chavero** - Desarrollo inicial y migración a Next.js
+## 🔧 Scripts Disponibles
 
-## 📄 Licencia
+```bash
+# Desarrollo
+npm run dev                 # Ejecutar full stack
+npm run dev --prefix backend    # Solo backend
+npm run dev --prefix frontend   # Solo frontend
 
-Este proyecto está bajo la Licencia MIT.
+# Construcción
+npm run build              # Construir todo
+npm run build:backend      # Construir solo backend
+npm run build:frontend     # Construir solo frontend
 
-MIT
+# Testing
+npm run test               # Tests de todo el proyecto
+npm run test:backend       # Tests del backend
+npm run test:frontend      # Tests del frontend
 
+# Utilidades
+npm run clean              # Limpiar archivos generados
+npm run lint               # Linting completo
+npm run install:all        # Instalar todas las dependencias
+```
 
+## 🔒 Seguridad Implementada
 
+- **JWT** para autenticación stateless
+- **bcryptjs** para hash de contraseñas (12 rounds)
+- **Helmet** para headers de seguridad
+- **Rate limiting** para prevenir ataques
+- **CORS** configurado apropiadamente
+- **Express Validator** para validación de entrada
+- **MongoDB sanitization** contra inyección NoSQL
 
+## 🧪 Testing
 
+```bash
+# Ejecutar todos los tests
+npm run test
+
+# Tests en modo watch
+npm run test:watch --prefix backend
+```
+
+## 📊 Monitoreo
+
+- Health check endpoint: `GET /health`
+- API info endpoint: `GET /api`
+
+## 🤝 Contribuir
+
+1. Fork el proyecto
+2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
+3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
+4. Push a la rama (`git push origin feature/AmazingFeature`)
+5. Abre un Pull Request
+
+## 📝 Licencia
+
+Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) para detalles.
+
+## 👨‍💻 Autor
+
+**Edgar Chavero**
+
+---
+
+## 🚀 Próximas Características
+
+- [ ] Sistema de perfiles de usuario
+- [ ] CRUD de posts/recetas
+- [ ] Sistema de comentarios y likes
+- [ ] Upload de imágenes
+- [ ] Notificaciones en tiempo real
+- [ ] API de búsqueda avanzada
+- [ ] Tests de integración completos
+- [ ] Documentación con Swagger
+- [ ] Docker containerization
+- [ ] CI/CD pipeline
