@@ -107,9 +107,9 @@ class App {
     
     // Legacy route compatibility (to be migrated)
     try {
-      this.app.use('/api/users', require('../routes/api/users'));
-      this.app.use('/api/profile', require('../routes/api/profile'));
-      this.app.use('/api/posts', require('../routes/api/posts'));
+      this.app.use('/api/users', require('./routes/api/users'));
+      this.app.use('/api/profile', require('./routes/api/profile'));
+      this.app.use('/api/posts', require('./routes/api/posts'));
     } catch (error) {
       console.warn('⚠️ Some legacy routes failed to load:', error.message);
     }

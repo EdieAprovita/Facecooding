@@ -1,3 +1,4 @@
+require('ts-node/register');
 const App = require('./src/app');
 
 // Handle uncaught exceptions

@@ -1,4 +1,4 @@
-const authService = require('../services/authService');
+const authService = require('../services/authService.ts');
 const { validationResult } = require('express-validator');
 const { createResponse, createErrorResponse } = require('../utils/responseHelper');
 
