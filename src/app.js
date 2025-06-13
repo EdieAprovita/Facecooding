@@ -11,6 +11,9 @@ const { errorHandler, notFound } = require('./middleware/errorHandler');
 
 // Route imports
 const authRoutes = require('./routes/auth');
+const userRoutes = require('./routes/api/users');
+const profileRoutes = require('./routes/api/profile');
+const postRoutes = require('./routes/api/posts');
 
 class App {
   constructor() {
@@ -107,9 +110,9 @@ class App {
     
     // Legacy route compatibility (to be migrated)
     try {
-      this.app.use('/api/users', require('./routes/api/users'));
-      this.app.use('/api/profile', require('./routes/api/profile'));
-      this.app.use('/api/posts', require('./routes/api/posts'));
+      this.app.use('/api/users', userRoutes);
+      this.app.use('/api/profile', profileRoutes);
+      this.app.use('/api/posts', postRoutes);
     } catch (error) {
       console.warn('⚠️ Some legacy routes failed to load:', error.message);
     }
