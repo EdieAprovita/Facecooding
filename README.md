@@ -59,6 +59,7 @@ npm run dev
 ```bash
 npm run server
 ```
+El script inicia **server-new.js** con nodemon, ya que el antiguo `server.js` fue eliminado.
 
 **Frontend** (desde client/):
 ```bash
