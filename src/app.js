@@ -103,7 +103,7 @@ class App {
     // API routes
     this.app.use('/api/auth', authRoutes);
     
-    // Additional routes can be added here
+    // FIXME: Migrate remaining legacy routes to the new structure
 
     // Serve static files in production
     if (config.NODE_ENV === 'production') {

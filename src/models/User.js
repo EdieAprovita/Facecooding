@@ -48,13 +48,6 @@ const UserSchema = new mongoose.Schema({
 // Index for better performance
 UserSchema.index({ email: 1 });
 
-// Virtual for profile
-UserSchema.virtual('profile', {
-  ref: 'Profile',
-  localField: '_id',
-  foreignField: 'user',
-  justOne: true
-});
 
 // Remove password from JSON output
 UserSchema.methods.toJSON = function() {

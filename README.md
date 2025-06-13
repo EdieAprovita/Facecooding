@@ -69,6 +69,20 @@ npm run dev
 El frontend estará disponible en: `http://localhost:3000`
 El backend estará disponible en: `http://localhost:5000`
 
+## 🧪 Testing
+
+Para ejecutar la suite de pruebas con Jest:
+
+```bash
+npm test
+```
+
+Si prefieres ejecutar las pruebas en modo observación:
+
+```bash
+npm run test:watch
+```
+
 ## 🛠️ Tecnologías Utilizadas
 
 ### Backend:

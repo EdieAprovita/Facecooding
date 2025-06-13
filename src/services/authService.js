@@ -118,7 +118,7 @@ class AuthService {
   // Get user by ID
   async getUserById(userId) {
     try {
-      const user = await User.findById(userId).populate('profile');
+      const user = await User.findById(userId);
       if (!user) {
         throw new Error('User not found');
       }
