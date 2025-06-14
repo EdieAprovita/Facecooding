@@ -19,6 +19,13 @@ const initialState: AuthState = {
 export const loadUser = createAsyncThunk(
   "auth/loadUser",
   async (_, { rejectWithValue }) => {
+    const token =
+      typeof window !== "undefined" ? localStorage.getItem("token") : null;
+
+    if (!token) {
+      return rejectWithValue({ message: "No token" } as ErrorResponse);
+    }
+
     try {
       const res = await axiosInstance.get("/auth/me");
       return res.data;
