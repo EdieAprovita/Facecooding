@@ -5,6 +5,7 @@ import {
   LoginFormData,
   RegisterFormData,
   ErrorResponse,
+  ERROR_CODES,
 } from "../../types";
 
 // Initial state
@@ -25,7 +26,7 @@ export const loadUser = createAsyncThunk(
     if (!authToken) {
       return rejectWithValue({
         message: "No auth token provided, skipping user load.",
-        code: "NO_TOKEN",
+        code: ERROR_CODES.NO_TOKEN,
       } as ErrorResponse);
     }
 
