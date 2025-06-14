@@ -99,6 +99,7 @@ export interface GitHubRepo {
 // API Response Types
 export interface ErrorResponse {
   message: string;
+  code?: string;
   errors?: ApiError[];
 }
 

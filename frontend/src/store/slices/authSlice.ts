@@ -19,12 +19,13 @@ const initialState: AuthState = {
 export const loadUser = createAsyncThunk(
   "auth/loadUser",
   async (_, { rejectWithValue }) => {
-    const token =
+    const authToken =
       typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
-    if (!token) {
+    if (!authToken) {
       return rejectWithValue({
         message: "No auth token provided, skipping user load.",
+        code: "NO_TOKEN",
       } as ErrorResponse);
     }
 
