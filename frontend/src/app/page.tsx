@@ -23,7 +23,7 @@ import { useRouter } from "next/navigation";
 export default function Home() {
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const { isAuthenticated, loading } = useAppSelector((state) => state.auth);
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   useEffect(() => {
