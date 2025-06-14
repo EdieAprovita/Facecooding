@@ -23,7 +23,9 @@ export const loadUser = createAsyncThunk(
       typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
     if (!token) {
-      return rejectWithValue({ message: "No token" } as ErrorResponse);
+      return rejectWithValue({
+        message: "No auth token provided, skipping user load.",
+      } as ErrorResponse);
     }
 
     try {
