@@ -20,7 +20,7 @@
     "@types/uuid": "^10.0.0",
     "axios": "^1.10.0",
     "moment": "^2.30.1",
-    "next": "15.3.3",
+    "next": "15.4.10",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-hook-form": "^7.57.0",
